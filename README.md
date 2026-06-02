@@ -1,5 +1,9 @@
 # quantlab — a systematic trading research toolkit
 
+[![CI](https://github.com/denizatmc/quant-research/actions/workflows/ci.yml/badge.svg)](https://github.com/denizatmc/quant-research/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A from-scratch quantitative research codebase covering the full path from raw market data
 to a backtested, risk-managed strategy: data engineering, alpha signals, an event-driven
 backtester, options pricing, market microstructure, and risk. Built in Python on free,
