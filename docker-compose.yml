@@ -1,0 +1,27 @@
+# Optional PostgreSQL backend for the data store.
+# The project runs fine on SQLite out of the box; this is here to show the SQL layer
+# targets a real RDBMS unchanged (see quantlab/data/database.py — only a config flag differs).
+#
+#   docker compose up -d
+#   # then set database.backend: postgres in config/config.yaml
+#
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: quantlab-pg
+    environment:
+      POSTGRES_USER: quant
+      POSTGRES_PASSWORD: quant
+      POSTGRES_DB: quantlab
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quant -d quantlab"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:

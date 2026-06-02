@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantlab"
+version = "0.1.0"
+description = "A research toolkit for systematic trading: signals, backtesting, options, microstructure, and risk."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Deniz Atmaca" }]
+license = { text = "MIT" }
+
+# Kept deliberately lean. Heavy/optional pieces (torch, the Postgres driver) live in
+# the extras below so a reviewer can clone and run the core without pulling everything.
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "polars>=0.20",
+    "scipy>=1.10",
+    "scikit-learn>=1.3",
+    "statsmodels>=0.14",
+    "arch>=6.0",
+    "yfinance>=0.2",
+    "SQLAlchemy>=2.0",
+    "matplotlib>=3.7",
+    "pyyaml>=6.0",
+    "tqdm>=4.65",
+]
+
+[project.optional-dependencies]
+deep = ["torch>=2.0"]
+postgres = ["psycopg2-binary>=2.9"]
+dev = ["pytest>=7.4", "ruff>=0.4"]
+
+[project.scripts]
+# Convenience entry points so the pipeline reads like a small CLI.
+quantlab-ingest = "quantlab.data.ingest:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["quantlab*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

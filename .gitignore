@@ -1,0 +1,31 @@
+# Data cache — heavy and fully reproducible from `python -m quantlab.data.ingest`
+data/cache/
+data/*.db
+data/*.sqlite
+*.parquet
+
+# NOTE: reports/figures/ is intentionally NOT ignored. The generated research report
+# references those PNGs, and committing them is what makes reports/research_report.md
+# render with its charts on GitHub. Regenerate with `python scripts/generate_report.py`.
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ipynb_checkpoints/
+.mypy_cache/
+.ruff_cache/
+
+# Envs
+.venv/
+venv/
+.env
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

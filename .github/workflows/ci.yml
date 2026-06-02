@@ -1,0 +1,31 @@
+# Continuous integration: install the package and run the test suite on every push/PR.
+# Deliberately lean — it installs the core (no torch) and runs pytest, which is enough to
+# catch a broken import or a regression in the maths without a heavyweight GPU runner.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check quantlab tests scripts || true   # advisory, don't fail the build on style
+      - name: Test
+        run: pytest -q

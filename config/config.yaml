@@ -1,0 +1,56 @@
+# Central configuration. Everything that I'd otherwise be tempted to hardcode lives here
+# so experiments stay reproducible.
+
+data:
+  # Where cached price data and the SQLite file live.
+  cache_dir: "data/cache"
+  start: "2015-01-01"
+  end: null            # null -> "up to today"
+  # A small, liquid, sector-diverse US universe. Liquid names keep the microstructure
+  # and execution assumptions honest, and the sector spread gives the cross-sectional
+  # strategies something to work with.
+  universe:
+    - AAPL
+    - MSFT
+    - NVDA
+    - AMZN
+    - GOOGL
+    - META
+    - JPM
+    - BAC
+    - XOM
+    - CVX
+    - JNJ
+    - PG
+    - KO
+    - WMT
+    - HD
+    - SPY        # benchmark / market factor
+  # Pairs I pre-screened as plausibly cointegrated (same sector, similar business).
+  # The stat-arb research notebook re-tests these properly rather than trusting the list.
+  candidate_pairs:
+    - [KO, PG]
+    - [JPM, BAC]
+    - [XOM, CVX]
+    - [GOOGL, META]
+
+database:
+  # "sqlite" needs nothing installed; "postgres" expects the docker-compose service.
+  backend: "sqlite"
+  sqlite_path: "data/cache/market.db"
+  postgres_url: "postgresql+psycopg2://quant:quant@localhost:5432/quantlab"
+
+backtest:
+  initial_capital: 1_000_000
+  # Costs are intentionally explicit. 1bp commission + a square-root market-impact term;
+  # see quantlab/backtest/execution.py for the model and its assumptions.
+  commission_bps: 1.0
+  slippage_bps: 2.0
+  trading_days_per_year: 252
+
+risk:
+  var_confidence: 0.99
+  max_gross_leverage: 2.0
+  max_position_weight: 0.10   # 10% of book per name
+
+seed: 42
